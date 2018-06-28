@@ -10,3 +10,10 @@ require('./config/passport');
 
 app.use(passport.initialize());
 app.use('/api', routesApi);
+
+app.use( (err , req , res , next ) => {
+    if( err.name === 'unauthorizedError') {
+        res.status(401);
+        res.json({"massage": err.name + ": " + err.massage});
+    }
+});

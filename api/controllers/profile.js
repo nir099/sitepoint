@@ -1,0 +1,15 @@
+let mongoose = require('mongoose');
+let User =mongoose.model('User');
+
+module.exports.profileRead = function( req , res ) {
+    if( ! req.payload._id ) {
+        res.status(401).json({
+            "massage": "UnauthorizedError: Private profile"
+        });
+    } else {
+        User.findById( req.payload._id)
+            .exec( (err , user ) {
+                res.status(200).json(user);
+            });
+    }
+};
