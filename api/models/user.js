@@ -38,4 +38,4 @@ userSchema.method.genarateJwt = function() {
     }, "secret"); // set secret as enviroment variable
 };
 
-mongoose.model('User' , userSchema );
+mongoose.model('User', userSchema);
