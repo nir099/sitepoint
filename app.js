@@ -4,12 +4,32 @@ let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let passport = require('passport');
+let cors = require('cors');
 
-require('./models/db');
-require('./config/passport');
+require('.api/models/db');
+require('.api/config/passport');
+
+let routesApi = require('./api/routes/index');
+
+let app = express();
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(cors());
 
 app.use(passport.initialize());
 app.use('/api', routesApi);
+
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
 
 app.use( (err , req , res , next ) => {
     if( err.name === 'unauthorizedError') {
@@ -17,3 +37,24 @@ app.use( (err , req , res , next ) => {
         res.json({"massage": err.name + ": " + err.massage});
     }
 });
+
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+
+module.exports = app;
