@@ -6,10 +6,13 @@ let bodyParser = require('body-parser');
 let passport = require('passport');
 let cors = require('cors');
 
-require('.api/models/db');
-require('.api/config/passport');
+require('dotenv').config();
+require('./api/models/db');
+require('./api/config/passport');
 
 let routesApi = require('./api/routes/index');
+let indexRouter = require('./routes/index');
+let usersRouter = require('./routes/users');
 
 let app = express();
 
@@ -20,10 +23,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use(passport.initialize());
 app.use('/api', routesApi);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

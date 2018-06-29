@@ -5,14 +5,14 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('correctwayNode:server');
+var debug = require('debug')('riskmanagerserver:server');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort('3000');
 app.set('port', port);
 
 /**
@@ -60,7 +60,7 @@ function onError(error) {
 
   var bind = typeof port === 'string'
     ? 'Pipe ' + port
-    : 'Port ' + port
+    : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
