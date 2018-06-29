@@ -7,7 +7,7 @@ let passport = require('passport');
 let cors = require('cors');
 
 require('dotenv').config();
-require('./api/models/db');
+require('./api/config/db');
 require('./api/config/passport');
 
 let routesApi = require('./api/routes/index');
